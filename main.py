@@ -38,3 +38,12 @@ class Event(HashModel):
     class Meta:
         database = redis
 
+
+# end points
+@app.post('/deliveries/create')
+async def create(request: Request):
+    body = await request.json()
+    delivery = Delivery(budget=body['data']['budget'], notes=body['data']['notes']).save()
+    event = Event(delivery_id=delivery.pk, type=body['type'], data=json.dumps(body['data'])).save()
+   
+    return event
