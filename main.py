@@ -13,9 +13,28 @@ app.add_middleware(
     allow_headers=['*']
 )
 
+# redis connection must set:  host,port,password
 redis = get_redis_connection(
     host="",
     port=11813,
     password="",
     decode_responses=True
 )
+
+# add Model
+class Delivery(HashModel):
+    budget: int = 0
+    notes: str = ''
+
+    class Meta:
+        database = redis
+
+# add Model
+class Event(HashModel):
+    delivery_id: str = None
+    type: str
+    data: str
+
+    class Meta:
+        database = redis
+
